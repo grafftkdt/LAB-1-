@@ -92,10 +92,12 @@ int main(void)
   GPIO_PinState SwitchStateS1[2]; 	// 2 states => present,last	//Switch S1
   GPIO_PinState SwitchStateS2[2];	// Switch S2
   GPIO_PinState SwitchStateS3[2];	// Switch S3
-  uint16_t LED1HalfPeriod = 1000;	// 0.5 Hz
+  uint16_t LED1HalfPeriod = 1000;	// LED D1 Blink at 0.5 Hz as default
   uint32_t TimeStamp = 0;
   uint32_t ButtonTimeStamp = 0;
-  uint16_t onoff = 1;				// LED D3 on as default
+  uint16_t onoff = 1;				// LED D3 ON as default
+  uint16_t mode = 1;				// LED D5 mode 1 => on 0.5 s off 1.5 s, mode 0 => on 1.5 s off 0.5 s
+  uint32_t timecount = 0 ;			// TimeCount for LED D5
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -109,9 +111,10 @@ int main(void)
 	 if(HAL_GetTick() - ButtonTimeStamp >= 100)	//millisecond
 	 {
 		 ButtonTimeStamp = HAL_GetTick();
-		 //Task 1 Start	//Task 2 Start
+		 //Task 1 Start	//Task 2 Start	//Task 3 Start
 	  SwitchStateS1[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);	//PA10 => Switch S1
 	  SwitchStateS2[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);	//PB3 => Switch S2
+	  SwitchStateS3[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);	//PB5 => Switch S3
 	  if(SwitchStateS1[1] == GPIO_PIN_SET && SwitchStateS1[0] == GPIO_PIN_RESET) // if last state is high, present state is low => falling edge
 	  {
 		  // Change Half Period of LED 1
@@ -150,6 +153,59 @@ int main(void)
 	  SwitchStateS2[1] = SwitchStateS2[0];
 	  	  // Task 2 End
 
+	  if(SwitchStateS3[1] == GPIO_PIN_SET && SwitchStateS3[0] == GPIO_PIN_RESET)
+	  {
+		  if(mode == 1)  //swap mode
+		  {
+			  mode = 0;
+		  }
+		  else
+		  {
+			  mode = 1 ;
+		  }
+	  }
+
+	  if(mode == 1) // on 0.5 s off 1.5 s
+	  {
+		  if(HAL_GetTick() - timecount >= 500)
+		  {
+			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET)
+			  {
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+				  timecount = HAL_GetTick();
+			  }
+		  }
+		  if(HAL_GetTick() - timecount >= 1500)
+		  {
+			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET)
+			  {
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+				  timecount = HAL_GetTick();
+			  }
+		  }
+	  }
+
+	  if(mode == 0)	// on 1.5 s off 0.5 s
+	  {
+		  if(HAL_GetTick() - timecount >= 1500)
+		  {
+			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET)
+			  {
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+				  timecount = HAL_GetTick();
+			  }
+		  }
+		  if(HAL_GetTick() - timecount >= 500)
+		  {
+			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET)
+			  {
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+				  timecount = HAL_GetTick();
+			  }
+		  }
+	  }
+	  SwitchStateS3[1] = SwitchStateS3[0];
+	  	  // Task 3 End
 	 }
 	  //Run LED Blink
 	  if(HAL_GetTick() - TimeStamp >= LED1HalfPeriod)
