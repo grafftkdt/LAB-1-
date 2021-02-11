@@ -107,7 +107,7 @@ int main(void)
 	 {
 		 ButtonTimeStamp = HAL_GetTick();
 		 //Task 1 Start
-	  SwitchState[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
+	  SwitchState[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);	//PA10 => Switch S1
 	  if(SwitchState[1] == GPIO_PIN_SET && SwitchState[0] == GPIO_PIN_RESET) // if last state is high, present state is low => falling edge
 	  {
 		  // Change Half Period of LED 1
@@ -135,7 +135,7 @@ int main(void)
 	  {
 		  TimeStamp = HAL_GetTick();
 		  //Toggle LED1
-		  if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)
+		  if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_9) == GPIO_PIN_SET)	//PA9 => LED D1
 		  {
 			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
 		  }
@@ -144,6 +144,8 @@ int main(void)
 			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 		  }
 	  }	//Task 1 End
+		 //Task 2 Start
+	  SwitchState[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
   }
   }
   /* USER CODE END 3 */
