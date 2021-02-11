@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000056a7  00000000  00000000  0002003c  2**0
+ 12 .debug_info   000056b6  00000000  00000000  0002003c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_abbrev 000010e1  00000000  00000000  000256e3  2**0
+ 13 .debug_abbrev 000010e1  00000000  00000000  000256f2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_aranges 000005d8  00000000  00000000  000267c8  2**3
+ 14 .debug_aranges 000005d8  00000000  00000000  000267d8  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_ranges 00000540  00000000  00000000  00026da0  2**3
+ 15 .debug_ranges 00000540  00000000  00000000  00026db0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macro  00014701  00000000  00000000  000272e0  2**0
+ 16 .debug_macro  00014701  00000000  00000000  000272f0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_line   00004f8a  00000000  00000000  0003b9e1  2**0
+ 17 .debug_line   00004f8a  00000000  00000000  0003b9f1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_str    00080e58  00000000  00000000  0004096b  2**0
+ 18 .debug_str    00080e66  00000000  00000000  0004097b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .comment      0000007b  00000000  00000000  000c17c3  2**0
+ 19 .comment      0000007b  00000000  00000000  000c17e1  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000016bc  00000000  00000000  000c1840  2**2
+ 20 .debug_frame  000016bc  00000000  00000000  000c185c  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -389,6 +389,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   GPIO_PinState SwitchStateS1[2]; 	// 2 states => present,last	//Switch S1
   GPIO_PinState SwitchStateS2[2];	// Switch S2
+  GPIO_PinState SwitchStateS3[2];	// Switch S3
   uint16_t LED1HalfPeriod = 1000;	// 0.5 Hz
  80004ee:	f44f 737a 	mov.w	r3, #1000	; 0x3e8
  80004f2:	82fb      	strh	r3, [r7, #22]
@@ -417,7 +418,7 @@ int main(void)
 		 ButtonTimeStamp = HAL_GetTick();
  800050e:	f000 faf9 	bl	8000b04 <HAL_GetTick>
  8000512:	60f8      	str	r0, [r7, #12]
-		 //Task 1 Start
+		 //Task 1 Start	//Task 2 Start
 	  SwitchStateS1[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);	//PA10 => Switch S1
  8000514:	f44f 6180 	mov.w	r1, #1024	; 0x400
  8000518:	4832      	ldr	r0, [pc, #200]	; (80005e4 <main+0x10c>)
@@ -488,7 +489,7 @@ int main(void)
  8000576:	2b00      	cmp	r3, #0
  8000578:	d111      	bne.n	800059e <main+0xc6>
 	  {
-		  if(onoff == 1)
+		  if(onoff == 1)	// LED D3 On
  800057a:	897b      	ldrh	r3, [r7, #10]
  800057c:	2b01      	cmp	r3, #1
  800057e:	d107      	bne.n	8000590 <main+0xb8>
@@ -503,7 +504,7 @@ int main(void)
  800058c:	817b      	strh	r3, [r7, #10]
  800058e:	e006      	b.n	800059e <main+0xc6>
 		  }
-		  else
+		  else				// LED D3 Off
 		  {
 			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
  8000590:	2200      	movs	r2, #0
@@ -518,6 +519,7 @@ int main(void)
 	  SwitchStateS2[1] = SwitchStateS2[0];
  800059e:	793b      	ldrb	r3, [r7, #4]
  80005a0:	717b      	strb	r3, [r7, #5]
+	  	  // Task 2 End
 
 	 }
 	  //Run LED Blink

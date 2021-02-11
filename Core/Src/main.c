@@ -91,6 +91,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   GPIO_PinState SwitchStateS1[2]; 	// 2 states => present,last	//Switch S1
   GPIO_PinState SwitchStateS2[2];	// Switch S2
+  GPIO_PinState SwitchStateS3[2];	// Switch S3
   uint16_t LED1HalfPeriod = 1000;	// 0.5 Hz
   uint32_t TimeStamp = 0;
   uint32_t ButtonTimeStamp = 0;
@@ -108,7 +109,7 @@ int main(void)
 	 if(HAL_GetTick() - ButtonTimeStamp >= 100)	//millisecond
 	 {
 		 ButtonTimeStamp = HAL_GetTick();
-		 //Task 1 Start
+		 //Task 1 Start	//Task 2 Start
 	  SwitchStateS1[0] = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);	//PA10 => Switch S1
 	  SwitchStateS2[0] = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);	//PB3 => Switch S2
 	  if(SwitchStateS1[1] == GPIO_PIN_SET && SwitchStateS1[0] == GPIO_PIN_RESET) // if last state is high, present state is low => falling edge
@@ -135,18 +136,19 @@ int main(void)
 
 	  if(SwitchStateS2[1] == GPIO_PIN_SET && SwitchStateS2[0] == GPIO_PIN_RESET)
 	  {
-		  if(onoff == 1)
+		  if(onoff == 1)	// LED D3 On
 		  {
 			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);	//PC7 => LED D3
 			  onoff = 0;
 		  }
-		  else
+		  else				// LED D3 Off
 		  {
 			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
 			  onoff = 1;
 		  }
 	  }
 	  SwitchStateS2[1] = SwitchStateS2[0];
+	  	  // Task 2 End
 
 	 }
 	  //Run LED Blink
