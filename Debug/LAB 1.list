@@ -470,7 +470,7 @@ int main(void)
  800055a:	783b      	ldrb	r3, [r7, #0]
  800055c:	707b      	strb	r3, [r7, #1]
 	 }
-	  //Run LED
+	  //Run LED Blink
 	  if(HAL_GetTick() - TimeStamp >= LED1HalfPeriod)
  800055e:	f000 faab 	bl	8000ab8 <HAL_GetTick>
  8000562:	4602      	mov	r2, r0

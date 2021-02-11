@@ -130,7 +130,7 @@ int main(void)
 	  }
 	  SwitchState[1] = SwitchState[0];
 	 }
-	  //Run LED
+	  //Run LED Blink
 	  if(HAL_GetTick() - TimeStamp >= LED1HalfPeriod)
 	  {
 		  TimeStamp = HAL_GetTick();
