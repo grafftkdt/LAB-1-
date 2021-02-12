@@ -165,21 +165,21 @@ int main(void)
 		  }
 	  }
 
-	  if(mode == 1) // on 0.5 s off 1.5 s
+	  if(mode == 1) // on 0.5 s off 1.5 s	//RESET => LED ON	//SET => LED OFF
 	  {
 		  if(HAL_GetTick() - timecount >= 500)
 		  {
-			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET)
+			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET)
 			  {
-				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
 				  timecount = HAL_GetTick();
 			  }
 		  }
 		  if(HAL_GetTick() - timecount >= 1500)
 		  {
-			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET)
+			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET)
 			  {
-				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
 				  timecount = HAL_GetTick();
 			  }
 		  }
@@ -189,17 +189,17 @@ int main(void)
 	  {
 		  if(HAL_GetTick() - timecount >= 1500)
 		  {
-			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET)
+			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET)
 			  {
-				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
 				  timecount = HAL_GetTick();
 			  }
 		  }
 		  if(HAL_GetTick() - timecount >= 500)
 		  {
-			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET)
+			  if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET)
 			  {
-				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
 				  timecount = HAL_GetTick();
 			  }
 		  }
